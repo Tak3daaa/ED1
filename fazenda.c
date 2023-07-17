@@ -2,7 +2,7 @@
 #include <stdlib.h>
  
 #include "animal.h"
-#include "criador.h"
+//#include "criador.h"
 #include "fazenda.h"
 
 struct endereco{
@@ -19,7 +19,7 @@ struct fazenda{
 	struct fazenda *prox;
 };
 
-Criador *criarListaEncadeadaCircularFazendas(){
+Fazenda *criarListaEncadeadaCircularFazendas(){
 	return NULL;
 }
 
@@ -38,7 +38,7 @@ Fazenda *cadastrarFazenda(Fazenda *fazendas){
 	scanf("%s", novo->localizacao.estado);
 	printf("Insira o logradouro: "); 
 	scanf("%s", novo->localizacao.logradouro);
-	novo->rebanho = criaListaEncadeadaSimplesAnimais();
+	//novo->rebanho = criaListaEncadeadaSimplesAnimais();
 
 	if(fazendas == NULL){
 		novo->prox = novo;
@@ -63,7 +63,7 @@ Fazenda *removerFazenda(Fazenda *fazendas, int id){
 		return fazendas;
 	}
 
-	if(!buscarFazenda(fazendas, id)){
+	if(!buscarFazenda(fazendas)){
 		printf("\nFazenda nao cadastrada!\n");
 		return fazendas;
 	}
@@ -112,7 +112,7 @@ Fazenda *removerFazenda(Fazenda *fazendas, int id){
 
 }
 
-int buscarFazenda(Fazenda *fazendas){
+Fazenda *buscarFazenda(Fazenda *fazendas){
 	Fazenda *aux = fazendas;
 	int id;
 	printf("Informe o id a buscar\n");
@@ -137,7 +137,9 @@ int buscarFazenda(Fazenda *fazendas){
 Fazenda *getBuscar(Fazenda *fazendas, int id){
 
 	Fazenda *aux = fazendas;
-	int id;
+	//int id;
+	//printf("Id: ");
+	//scanf("%d", &id);
 
 	if(fazendas == NULL){
 		printf("\nSem fazendas registradas!\n");
