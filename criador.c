@@ -4,6 +4,9 @@
 
 #include "criador.h"
 #include "fazenda.h"
+#include "fazenda.c"
+#include "animal.h"
+#include "animal.c"
 //#include "fazenda.c"
 
 struct criador
@@ -18,13 +21,6 @@ struct criador
 int id = 0;
 
 Criador *criarListaDuplaCriadores(){
-	/*Criador *c;
-
-	c = (Criador*)malloc(sizeof(Criador));
-
-	c->ant = NULL;
-	c->prox = NULL;*/
-
 	return NULL;
 }
 
@@ -32,12 +28,17 @@ Criador *cadastrarCriador(Criador *criadores){
 	Criador *c;
 
 	c = (Criador*)malloc(sizeof(Criador));
-	//c->fazendas = (Fazenda*)malloc(sizeof(Fazenda));
-	//c->fazendas->prox = NULL;
-	//c->fazendas->id_fazenda = id;
+	c->fazendas = criarListaEncadeadaCircularFazendas();
 	c->id_criador = ++id;
+	fflush(stdin);
+	printf("Nome do criador: ");
+	scanf("%s[^\n]", c->nome);
+	fflush(stdin);
+	c->fazendas = cadastrarFazenda(c->fazendas);
+	c->fazendas->id_criador = c->id_criador;
+	// printf("Id do criador: %d\n", c->fazendas->id_criador);
 	c->ant = NULL;
-	strcpy(c->nome, "teste");
+	//strcpy(c->nome, "teste");
 	if(!criadores){
 		c->prox = NULL;
 	} else{
@@ -59,6 +60,7 @@ Criador *cadastrarCriadorII(Criador *criadores){
 	c->id_criador = id;
 	c->ant = NULL;
 	strcpy(c->nome, "teste");
+
 	if(!criadores){
 		c->prox = NULL;
 	} else{
@@ -110,6 +112,7 @@ int buscarCriador(Criador *criadores){
 void mostrarCriadores(Criador *criadores){
 	Criador *aux = criadores;
 	//printf("Id\tNome\tTem Fazenda\tId fazenda\n");
+	printf("Criador\n");
 	printf("Id\tNome\n");
 	while(aux){
 		//printf("%d\t%s\t\t", aux->id_criador, aux->nome);
@@ -119,3 +122,15 @@ void mostrarCriadores(Criador *criadores){
 	}
 }
 
+void mostrarTudo(Criador *criador){
+	Criador *aux = criador;
+	printf("\n.......\n");
+	mostrarAnimalStatus(aux->fazendas->rebanho);
+	printf("\n.......\nAnimal por sexo\n");
+	mostrarAnimalSexo(aux->fazendas->rebanho);
+	printf("\n.......\n");
+
+
+}
+
+// https://wiki.python.org.br/ExerciciosClasses
