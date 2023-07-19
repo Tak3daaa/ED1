@@ -1,7 +1,7 @@
 typedef struct fazenda Fazenda;
 typedef struct endereco Endereco;
 //#include "criador.h"
- 
+
 //Criador *criarListaEncadeadaCircularFazendas();
 Fazenda *criarListaEncadeadaCircularFazendas();
 Fazenda *cadastrarFazenda(Fazenda *fazendas);
