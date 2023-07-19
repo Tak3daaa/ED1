@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
  
-#include "animal.h"
-//#include "criador.h"
 #include "fazenda.h"
+#include "animal.h"
+#include "criador.h"
+// #include "animal.c"
+//#include "criador.h"
 
 struct endereco{
 	char cidade[50], estado[2], logradouro[200];
@@ -28,8 +30,9 @@ Fazenda *cadastrarFazenda(Fazenda *fazendas){
 	Fazenda *aux = fazendas;
 
 	novo->id_fazenda = rand() % 100000;
-	printf("\nInsira novamente seu ID de criador: "); 
-	scanf("%d", &novo->id_criador);
+	//printf("Id do criador: %d\n", fazendas->id_criador);
+	//printf("\nInsira novamente seu ID de criador: "); 
+	//scanf("%d", &novo->id_criador);
 	printf("Insira o nome da fazenda: "); 
 	scanf("%s", novo->nome);
 	printf("Insira a cidade: "); 
@@ -38,7 +41,12 @@ Fazenda *cadastrarFazenda(Fazenda *fazendas){
 	scanf("%s", novo->localizacao.estado);
 	printf("Insira o logradouro: "); 
 	scanf("%s", novo->localizacao.logradouro);
-	//novo->rebanho = criaListaEncadeadaSimplesAnimais();
+	novo->rebanho = criaListaEncadeadaSimplesAnimais();
+	//fazendas->rebanho = criaListaEncadeadaSimplesAnimais();
+	novo->rebanho = cadastrarAnimal(novo->rebanho);
+	//novo->rebanho->id_fazenda = novo->id_fazenda;
+	//printf("Teste rebanho id fazenda: %d\n", novo->rebanho->id_fazenda);
+	//printf("Teste id fazenda: %d\n", novo->id_fazenda);
 
 	if(fazendas == NULL){
 		novo->prox = novo;
