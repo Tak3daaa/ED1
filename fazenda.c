@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
- 
-#include "fazenda.h"
+
+
 #include "animal.h"
 #include "criador.h"
-// #include "animal.c"
-//#include "criador.h"
+#include "fazenda.h"
 
 struct endereco{
 	char cidade[50], estado[2], logradouro[200];
@@ -29,10 +28,11 @@ Fazenda *cadastrarFazenda(Fazenda *fazendas){
 	Fazenda *novo = (Fazenda *) malloc(sizeof(Fazenda));
 	Fazenda *aux = fazendas;
 
-	novo->id_fazenda = rand() % 100000;
-	//printf("Id do criador: %d\n", fazendas->id_criador);
-	//printf("\nInsira novamente seu ID de criador: "); 
-	//scanf("%d", &novo->id_criador);
+	//novo->id_fazenda = rand() % 100 + 10;
+	printf("\nInsira o ID da fazenda: "); 
+	scanf("%d", &novo->id_fazenda);
+	printf("\nInsira novamente seu ID de criador: "); 
+	scanf("%d", &novo->id_criador);
 	printf("Insira o nome da fazenda: "); 
 	scanf("%s", novo->nome);
 	printf("Insira a cidade: "); 
@@ -41,12 +41,8 @@ Fazenda *cadastrarFazenda(Fazenda *fazendas){
 	scanf("%s", novo->localizacao.estado);
 	printf("Insira o logradouro: "); 
 	scanf("%s", novo->localizacao.logradouro);
-	novo->rebanho = criaListaEncadeadaSimplesAnimais();
-	//fazendas->rebanho = criaListaEncadeadaSimplesAnimais();
-	novo->rebanho = cadastrarAnimal(novo->rebanho);
-	//novo->rebanho->id_fazenda = novo->id_fazenda;
-	//printf("Teste rebanho id fazenda: %d\n", novo->rebanho->id_fazenda);
-	//printf("Teste id fazenda: %d\n", novo->id_fazenda);
+	//novo->rebanho = cadastrarAnimal(novo->rebanho);
+	
 
 	if(fazendas == NULL){
 		novo->prox = novo;
@@ -64,63 +60,63 @@ Fazenda *cadastrarFazenda(Fazenda *fazendas){
 }
 
 Fazenda *removerFazenda(Fazenda *fazendas, int id){
-	Fazenda *aux = fazendas, *aux2;
+  	Fazenda *aux = fazendas, *aux2;
 
-	if(fazendas == NULL){
-		printf("\nLista vazia\n");
-		return fazendas;
-	}
+  	if(fazendas == NULL){
+  		printf("\nLista vazia\n");
+  		return fazendas;
+  	}
 
-	if(!buscarFazenda(fazendas)){
-		printf("\nFazenda nao cadastrada!\n");
-		return fazendas;
-	}
+  	if(!(getBuscar(fazendas, id))){
+  		printf("\nFazenda nao cadastrada!\n");
+  		return fazendas;
+  	}
 
-	if(aux->id_fazenda == id){
+  	if(aux->id_fazenda == id){
 
-		if(aux->rebanho != NULL){
-			printf("\nNao eh possivel remover fazenda com rebanho!\n");
-			return fazendas;
-		}
+  		if(aux->rebanho != NULL){
+  			printf("\nNao eh possivel remover fazenda com rebanho!\n");
+  			return fazendas;
+  		}
 
-		if(aux->prox == aux){
-			return NULL;
-		}
+  		if(aux->prox == aux){
+  			return NULL;
+  		}
 
-		while(aux->prox != fazendas){
-			aux = aux->prox;
-		}
+  		while(aux->prox != fazendas){
+  			aux = aux->prox;
+  		}
 
-		aux->prox = fazendas;
-		free(fazendas);
+  		aux->prox = fazendas;
+  		free(fazendas);
 
-		return aux->prox;
-	}
+  		return aux->prox;
+  	}
 
-	while(aux->prox != fazendas && aux->prox->id_fazenda != id){
-		aux = aux->prox;
-	}
+  	while(aux->prox != fazendas && aux->prox->id_fazenda != id){
+  		aux = aux->prox;
+  	}
 
-	if(aux->prox == fazendas){
-		printf("\nFazenda nao cadastrada!\n");
-		return fazendas;
-	}
+  	if(aux->prox == fazendas){
+  		printf("\nFazenda nao cadastrada!\n");
+  		return fazendas;
+  	}
 
-	if(aux->rebanho != NULL){
-		printf("\nNao eh possivel remover fazenda com rebanho!\n");
-		return fazendas;
-	}
+  	if(aux->rebanho != NULL){
+  		printf("\nNao eh possivel remover fazenda com rebanho!\n");
+  		return fazendas;
+  	}
 	
 
-	aux2 = aux->prox;
-	aux->prox = aux->prox->prox;
-	free(aux2);
+  	aux2 = aux->prox;
+  	aux->prox = aux->prox->prox;
+  	free(aux2);
 
-	return fazendas;
+  	return fazendas;
 
 }
 
-Fazenda *buscarFazenda(Fazenda *fazendas){
+int buscarFazenda(Fazenda *fazendas){
 	Fazenda *aux = fazendas;
 	int id;
 	printf("Informe o id a buscar\n");
@@ -128,41 +124,38 @@ Fazenda *buscarFazenda(Fazenda *fazendas){
 
 	if(fazendas == NULL){
 		printf("\nSem fazendas registradas!\n");
-		return fazendas;
+		return 0;
 	}
 
 	if(aux->id_fazenda == id){
-		return aux;
+		return aux->id_fazenda;
 	}
 
 	while(aux->prox != fazendas && aux->prox->id_fazenda != id){
 		aux = aux->prox;
 	}
 
-	return aux->prox == fazendas ? NULL : aux->prox;
+	return aux->prox == fazendas ? 0 : aux->prox->id_fazenda;
 }
 
 Fazenda *getBuscar(Fazenda *fazendas, int id){
 
-	Fazenda *aux = fazendas;
-	//int id;
-	//printf("Id: ");
-	//scanf("%d", &id);
+  	Fazenda *aux = fazendas;
 
-	if(fazendas == NULL){
-		printf("\nSem fazendas registradas!\n");
-		return fazendas;
-	}
+  	if(fazendas == NULL){
+  		printf("\nSem fazendas registradas!\n");
+  		return fazendas;
+  	}
 
-	if(aux->id_fazenda == id){
-		return aux;
-	}
+  	if(aux->id_fazenda == id){
+  		return aux;
+  	}
 
-	while(aux->prox != fazendas && aux->prox->id_fazenda != id){
-		aux = aux->prox;
-	}
+  	while(aux->prox != fazendas && aux->prox->id_fazenda != id){
+  		aux = aux->prox;
+  	}
 
-	return aux->prox == fazendas ? NULL : aux->prox;
+  	return aux->prox == fazendas ? NULL : aux->prox;
 }
 
 // int quantAnimaisSexo(Fazenda *fazenda, char sexo){
