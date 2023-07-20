@@ -19,32 +19,16 @@ Animal *criaListaEncadeadaSimplesAnimais() {
 
 Animal *cadastrarAnimal(Animal *rebanho) {
 	Animal *novo = (Animal*)malloc(sizeof(Animal));
-	//printf("\nInforme o id da fazenda: ");
-	//scanf("%d", &novo->id_fazenda);
-
-	// Verifica se a fazenda já existe
-	/*Animal *temp;
-	for (temp = rebanho; temp != NULL; temp = temp->prox) {
-		if (novo->id_fazenda == temp->id_fazenda) {
-			printf("A fazenda ja existe.\n");
-			free(novo);
-			return rebanho; // Retorna a lista original sem adicionar o novo animal
-		}
-	}*/
-
 	printf("Informe o id do animal: ");
 	scanf("%d", &novo->id_animal);
 
-	// Verifica se o id do animal já existe
-	/*for (temp = rebanho; temp != NULL; temp = temp->prox) {
-		if (novo->id_animal == temp->id_animal) {
-			printf("O id do animal ja existe.\n");
-			free(novo);
-			return rebanho; // Retorna a lista original sem adicionar o novo animal
-		}
-	}*/
+	while (animalExiste(rebanho,novo->id_animal))
+	{
+		printf("O id ja existe.");
+		scanf("%d", &novo->id_animal);
+	}
 	
-
+	
 	printf("Informe o sexo do animal (M ou F): ");
 	scanf(" %c", &novo->sexo);
 	while(novo->sexo != 'M' && novo->sexo != 'F') {
@@ -69,11 +53,21 @@ Animal *cadastrarAnimal(Animal *rebanho) {
 		printf("3 - Troca\n");
 		scanf("%d", &novo->status); 
 	}
-
 	novo->prox = rebanho;
 	rebanho = novo;
 
-	return rebanho;
+	return novo;
+}
+
+int animalExiste(Animal* rebanho, int id_animal) {
+    Animal* aux = rebanho;
+    while (aux != NULL) {
+        if (aux->id_animal == id_animal) {
+            return 1; 
+        }
+        aux = aux->prox;
+    }
+    return 0; 
 }
 
 Animal *buscarAnimal(Animal *rebanho)
@@ -110,56 +104,73 @@ Animal *buscarAnimal(Animal *rebanho)
 	return NULL;
 }
 
-void mostrarAnimalSexo(Animal *rebanho)
-{
-	Animal *aux;
+void contAnimaisSexo(Fazenda *fazenda){
 	int countF = 0, countM = 0;
-	for(aux = rebanho ; aux != NULL ; aux = aux->prox)
-	{
-		if (aux->sexo == 'F')
-		{
+	Animal *aux = fazenda->rebanho; // Criação de um ponteiro auxiliar para percorrer a lista
+	while (aux) {
+		if (aux->sexo == 'F') {
 			countF++;
 		}
-		if (aux->sexo == 'M')
-		{
+		if (aux->sexo == 'M') {
 			countM++;
-		}	
+		}
+		aux = aux->prox; // Avança para o próximo nó da lista
 	}
-
+	
 	printf("Masculino: %d\nFeminino: %d\n", countM, countF);
-
 }
 
-void mostrarAnimalStatus(Animal *rebanho)
-{
-	Animal *aux;
-	int sts;
-	printf("Informe o tipo de status do animal que queira listar: ");
-	scanf("%d", &sts);
-	if (sts == 1)
-	{
-		printf("\nStatus: Nascimento na propria fazenda.\n");
-	}
-	if (sts == 2)
-	{
-		printf("\nStatus: Vendido.\n");
-	}
-	if (sts == 3)
-	{
-		printf("\nStatus: Troca.\n");
-	}
-	for(aux = rebanho ; aux != NULL ; aux = aux->prox)
-	{
+void MostrarStatus(Fazenda *fazenda, int sts){
+	Animal *aux = fazenda->rebanho;
+	while(aux){
 		if(aux->status == sts)
 		{
 			printf("---------------------------------------\n");
-			printf("Id da fazenda: %d\n", rebanho->id_fazenda);
-			printf("Id do animal: %d\n", rebanho->id_animal);
-			printf("Sexo: %c\n", rebanho->sexo);
-			printf("Peso: %.2f\n", rebanho->peso);
+			printf("Id da fazenda: %d\n", aux->id_fazenda);
+			printf("Id do animal: %d\n", aux->id_animal);
+			printf("Sexo: %c\n", aux->sexo);
+			printf("Peso: %.2f\n", aux->peso);
 		}
+
+		aux = aux->prox;
 	}
 }
+
+float contArroba(Fazenda *fazenda){
+	float soma=0;
+	Animal *aux = fazenda->rebanho;
+	while(aux){
+
+		soma += aux->peso;
+
+		aux = aux->prox;
+	}
+	return soma/15;
+}
+
+void mostrarAnimal(Animal* rebanho) {
+    printf("---------------------------------------\n");
+    printf("Id da fazenda: %d\n", rebanho->id_fazenda);
+    printf("Id do animal: %d\n", rebanho->id_animal);
+    printf("Sexo: %c\n", rebanho->sexo);
+    printf("Peso: %.2f\n", rebanho->peso);
+
+    if (rebanho->status == 1) {
+        printf("Status: Nascimento na própria fazenda.\n");
+    } else if (rebanho->status == 2) {
+        printf("Status: Vendido.\n");
+    } else if (rebanho->status == 3) {
+        printf("Status: Troca.\n");
+    }
+}
+
+void mostrarTodosAnimais(Fazenda* fazenda) {
+    Animal* aux;
+    for (aux = fazenda->rebanho; aux != NULL; aux = aux->prox) {
+        mostrarAnimal(aux);
+    }
+}
+
 
 Animal* permutasAnimais(Fazenda* origem, Fazenda* destino, int id_animal) {
     Animal* rebanho_origem = origem->rebanho;
@@ -274,4 +285,3 @@ Animal *removerAnimal(Fazenda *fazenda, int id_animal)
 
 	return fazenda->rebanho;	
 }
-
